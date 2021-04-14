@@ -8,6 +8,7 @@ const typeDefs = gql`
   }
 
   type MemberConnection {
+    totalCount: Int
     edges: [Edge]
   }
 
@@ -32,6 +33,7 @@ const resolvers = {
     },
   },
   MemberConnection: {
+    totalCount: () => members.length,
     edges(parent) {
       return parent;
     },
