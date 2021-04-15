@@ -3,13 +3,17 @@ const { gql } = require("apollo-server");
 module.exports = gql`
   type Query {
     members: [Member]
-    memberConnection(first: String, after: String): MemberConnection
+    memberConnection(
+      first: String
+      after: String
+      sort: Sort
+    ): MemberConnection!
   }
 
   type MemberConnection {
     totalCount: Int
-    edges: [Edge]
-    pageInfo: PageInfo
+    edges: [Edge]!
+    pageInfo: PageInfo!
   }
 
   type Edge {
@@ -25,8 +29,24 @@ module.exports = gql`
   }
 
   type PageInfo {
-    endCursor: String
-    hasNextPage: Boolean
-    hasPreviousPage: Boolean
+    endCursor: String!
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+  }
+
+  input Sort {
+    order: Order = ASC
+    field: Field
+  }
+
+  enum Order {
+    ASC
+    DESC
+  }
+
+  enum Field {
+    name
+    role
+    department
   }
 `;
