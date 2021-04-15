@@ -17,12 +17,16 @@ module.exports = {
     pageInfo: (parent) => parent,
   },
   Edge: {
-    node(parent, args, context, info) {
+    node(parent) {
       return members.find((m) => m.id === parent.id);
     },
     cursor: (parent) => parent.id,
   },
   PageInfo: {
-    endCursor: (parent, args, context) => parent[parent.length - 1].id,
+    endCursor: (parent) => parent[parent.length - 1].id,
+    hasNextPage: (parent) => {
+      const rest = members.slice(parseInt(parent[parent.length - 1].id));
+      return rest.length > 0;
+    },
   },
 };
