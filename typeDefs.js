@@ -27,5 +27,6 @@ module.exports = gql`
   type PageInfo {
     endCursor: String
     hasNextPage: Boolean
+    hasPreviousPage: Boolean
   }
 `;

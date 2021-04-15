@@ -25,8 +25,12 @@ module.exports = {
   PageInfo: {
     endCursor: (parent) => parent[parent.length - 1].id,
     hasNextPage: (parent) => {
-      const rest = members.slice(parseInt(parent[parent.length - 1].id));
-      return rest.length > 0;
+      const nextPage = members.slice(parseInt(parent[parent.length - 1].id));
+      return nextPage.length > 0;
+    },
+    hasPreviousPage: (parent) => {
+      const prevPage = members.slice(0, parseInt(parent[0].id - 1));
+      return prevPage.length > 0;
     },
   },
 };
