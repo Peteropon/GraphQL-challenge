@@ -3,7 +3,7 @@ const members = require("./members");
 module.exports = {
   Query: {
     members: () => members,
-    memberConnection(parent, { first, after, sort, ...args }, context) {
+    memberConnection(parent, { first, after, sort }, context) {
       const requestedMembers = members.slice(
         parseInt(after),
         parseInt(after) + parseInt(first)
@@ -27,7 +27,7 @@ module.exports = {
   },
   MemberConnection: {
     totalCount: () => members.length,
-    edges: (parent) => parent.result,
+    edges: ({ result }) => result,
     pageInfo: ({ startCursor, endCursor }) => {
       return {
         startCursor,
