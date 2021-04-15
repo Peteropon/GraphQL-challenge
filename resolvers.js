@@ -3,12 +3,14 @@ const members = require("./members");
 module.exports = {
   Query: {
     members: () => members,
-    memberConnection(parent, { first, after, ...args }, context) {
-      const filteredMembers = members.slice(
+    memberConnection(parent, { first, after, sort, ...args }, context) {
+      const requestedMembers = members.slice(
         parseInt(after),
         parseInt(after) + parseInt(first)
       );
-      return filteredMembers;
+      return requestedMembers.sort((a, b) =>
+        a[sort.field] > b[sort.field] ? 1 : -1
+      );
     },
   },
   MemberConnection: {
