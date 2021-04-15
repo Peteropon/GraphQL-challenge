@@ -13,7 +13,7 @@ module.exports = gql`
   type MemberConnection {
     totalCount: Int
     edges: [Edge]!
-    pageInfo: PageInfo!
+    pageInfo: PageInfo
   }
 
   type Edge {
@@ -29,9 +29,9 @@ module.exports = gql`
   }
 
   type PageInfo {
-    endCursor: String!
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
+    endCursor: String
+    hasNextPage: Boolean
+    hasPreviousPage: Boolean
   }
 
   input Sort {

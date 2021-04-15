@@ -8,15 +8,32 @@ module.exports = {
         parseInt(after),
         parseInt(after) + parseInt(first)
       );
-      return requestedMembers.sort((a, b) =>
-        a[sort.field] > b[sort.field] ? 1 : -1
-      );
+      const endCursor = requestedMembers[requestedMembers.length - 1].id;
+      const startCursor = requestedMembers[0].id;
+
+      return {
+        startCursor,
+        endCursor,
+        result:
+          sort.order === "ASC"
+            ? requestedMembers.sort((a, b) =>
+                a[sort.field] > b[sort.field] ? 1 : -1
+              )
+            : requestedMembers.sort((a, b) =>
+                a[sort.field] < b[sort.field] ? 1 : -1
+              ),
+      };
     },
   },
   MemberConnection: {
     totalCount: () => members.length,
-    edges: (parent) => parent,
-    pageInfo: (parent) => parent,
+    edges: (parent) => parent.result,
+    pageInfo: ({ startCursor, endCursor }) => {
+      return {
+        startCursor,
+        endCursor,
+      };
+    },
   },
   Edge: {
     node(parent) {
@@ -25,13 +42,13 @@ module.exports = {
     cursor: (parent) => parent.id,
   },
   PageInfo: {
-    endCursor: (parent) => parent[parent.length - 1].id,
-    hasNextPage: (parent) => {
-      const nextPage = members.slice(parseInt(parent[parent.length - 1].id));
+    endCursor: ({ endCursor }) => endCursor,
+    hasNextPage: ({ endCursor }) => {
+      const nextPage = members.slice(parseInt(endCursor));
       return nextPage.length > 0;
     },
-    hasPreviousPage: (parent) => {
-      const prevPage = members.slice(0, parseInt(parent[0].id - 1));
+    hasPreviousPage: ({ startCursor }) => {
+      const prevPage = members.slice(0, parseInt(startCursor - 1));
       return prevPage.length > 0;
     },
   },
